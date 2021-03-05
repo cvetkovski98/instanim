@@ -4,28 +4,54 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import mk.com.ukim.finki.mpip.instanim.R
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import mk.com.ukim.finki.mpip.instanim.data.model.Status
+import mk.com.ukim.finki.mpip.instanim.databinding.FragmentHomeBinding
+import mk.com.ukim.finki.mpip.instanim.ui.auth.AuthViewModel
+import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class HomeFragment : Fragment() {
+    private lateinit var binding: FragmentHomeBinding
 
-    private lateinit var homeViewModel: HomeViewModel
+    private val authViewModel: AuthViewModel by activityViewModels {
+        FactoryInjector.getAuthViewModel()
+    }
+
+    private val homeViewModel: HomeViewModel by viewModels {
+        FactoryInjector.getHomeViewModel()
+    }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel =
-                ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        authViewModel.fetchCurrentUser()
+        authViewModel.currentUser.observe(viewLifecycleOwner, {
+            when (it.status) {
+                Status.ERROR -> {
+                    navigateToLogin()
+                }
+                else -> {
+                    // do nothing
+                }
+            }
+        })
+    }
+
+    private fun navigateToLogin() {
+        val action = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+        findNavController().navigate(action)
+    }
+
+
 }

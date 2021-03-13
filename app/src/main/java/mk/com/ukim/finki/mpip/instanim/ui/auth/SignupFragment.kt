@@ -30,7 +30,6 @@ class SignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupButtons()
-        authViewModel.fetchCurrentUser()
         authViewModel.currentUser.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.ERROR -> {
@@ -51,7 +50,7 @@ class SignupFragment : Fragment() {
     }
 
     private fun redirectToHome() {
-        val action = SignupFragmentDirections.actionSignupFragmentToHomeFragment()
+        val action = SignupFragmentDirections.actionSignupFragmentToPostListFragment()
         findNavController().navigate(action)
     }
 

@@ -1,7 +1,7 @@
 package mk.com.ukim.finki.mpip.instanim.data.entity
 
 data class User(
-    val user_id: Long,
+    val userId: String,
     val username: String,
     val email: String,
     val description: String?,

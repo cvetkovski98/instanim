@@ -3,46 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/postListFragment">
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="mk.com.ukim.finki.mpip.instanim.ui.home.HomeFragment"
-        android:label="home_fragment"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/postListFragment"
+        android:name="mk.com.ukim.finki.mpip.instanim.ui.posts.PostListFragment"
+        android:label="Instanim"
+        tools:layout="@layout/fragment_post_list">
         <action
-            android:id="@+id/action_homeFragment_to_signupFragment"
+            android:id="@+id/action_postListFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
+            android:id="@+id/action_postListFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment"
+            android:id="@+id/action_postListFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_postListFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.auth.SignupFragment"
-        android:label="signup_fragment"
-        tools:layout="@layout/fragment_signup" >
+        android:label="Signup"
+        tools:layout="@layout/fragment_signup">
         <action
-            android:id="@+id/action_signupFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_signupFragment_to_postListFragment"
+            app:destination="@id/postListFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.auth.LoginFragment"
-        android:label="login_fragment"
-        tools:layout="@layout/fragment_login" >
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_loginFragment_to_postListFragment"
+            app:destination="@id/postListFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.profile.ProfileFragment"
-        android:label="profile_fragment"
+        android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="mk.com.ukim.finki.mpip.instanim.ui.posts.PostDetailsFragment"
+        android:label="Instanim"
+        tools:layout="@layout/fragment_post_details">
+        <argument
+            android:name="postId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/pictureSelectFragment"
+        android:name="mk.com.ukim.finki.mpip.instanim.ui.posts.create.PictureSelectFragment"
+        android:label="Select Picture"
+        tools:layout="@layout/fragment_picture_select">
+        <action
+            android:id="@+id/action_pictureSelectFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="mk.com.ukim.finki.mpip.instanim.ui.posts.create.CreatePostFragment"
+        android:label="Finish Post"
+        tools:layout="@layout/fragment_create_post" >
+        <action
+            android:id="@+id/action_createPostFragment_to_postListFragment"
+            app:destination="@id/postListFragment" />
+    </fragment>
 </navigation>

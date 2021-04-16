@@ -1,14 +1,13 @@
 package mk.com.ukim.finki.mpip.instanim.repository
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
 
 object StorageRepository {
-    private val TAG: String = "StorageRepository"
+
     private val storage = Firebase.storage("gs://instanim.appspot.com")
     private val storageRef = storage.reference
 

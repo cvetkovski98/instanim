@@ -7,10 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import mk.com.ukim.finki.mpip.instanim.data.entity.User
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
+import mk.com.ukim.finki.mpip.instanim.data.model.Status
 import mk.com.ukim.finki.mpip.instanim.repository.AuthRepository
+import mk.com.ukim.finki.mpip.instanim.repository.UserRepository
 
-class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class AuthViewModel(
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
+) : ViewModel() {
     private val _currentUser = MutableLiveData<Resource<FirebaseUser>>()
     val currentUser: LiveData<Resource<FirebaseUser>>
         get() = _currentUser
@@ -43,15 +49,35 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         fetchCurrentUser()
     }
 
-    fun signUpUser(email: String?, password: String?) {
+    fun signUpUser(username: String, email: String?, password: String?) {
         _currentUser.value = Resource.loading(null)
+
 
         if (email.isNullOrBlank() || password.isNullOrBlank()) {
             _currentUser.value = Resource.error(null, "Email or password is blank")
         } else {
             viewModelScope.launch(IO) {
-                val user = authRepository.signUp(email, password)
-                _currentUser.postValue(user)
+                val authUser = authRepository.signUp(email, password)
+
+                when (authUser.status) {
+                    Status.SUCCESS -> {
+                        authUser.data?.let {
+                            val user = User(
+                                uid = authUser.data.uid,
+                                username = username,
+                                description = "",
+                                follows = listOf(),
+                                followedBy = listOf()
+                            )
+                            userRepository.createUser(user) // TODO: handle response
+                        }
+                    }
+                    else -> {
+                        // do nothing
+                    }
+                }
+
+                _currentUser.postValue(authUser)
             }
         }
     }

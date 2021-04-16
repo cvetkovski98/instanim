@@ -56,7 +56,7 @@ class SignupFragment : Fragment() {
 
     private fun setupButtons() {
         binding.signupButton.setOnClickListener {
-
+            val username = binding.username.text.toString()
             val email = binding.email.text.toString()
             val password = binding.password.text.toString()
             val confirmPassword = binding.confirmPassword.text.toString()
@@ -68,7 +68,7 @@ class SignupFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                authViewModel.signUpUser(email, password)
+                authViewModel.signUpUser(username, email, password)
             }
         }
     }

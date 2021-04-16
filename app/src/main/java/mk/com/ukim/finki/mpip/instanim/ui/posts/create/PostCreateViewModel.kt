@@ -15,7 +15,7 @@ import mk.com.ukim.finki.mpip.instanim.util.Util
 
 class PostCreateViewModel(
     private val postRepository: PostRepository,
-    private val storageRepository: StorageRepository,
+    private val storageRepository: StorageRepository
 ) : ViewModel() {
     private var _postBuilder = PostBuilder()
 
@@ -51,7 +51,8 @@ class PostCreateViewModel(
             localUri?.let {
                 storageRepository.uploadPhoto(Uri.parse(it), imageTargetUri)
 
-                val uri = storageRepository.getDownloadUrl(imageTargetUri) // TODO: handle possible failure
+                val uri =
+                    storageRepository.getDownloadUrl(imageTargetUri) // TODO: handle possible failure
                 _postBuilder.imageUri = uri.data
 
                 _createResult.postValue(

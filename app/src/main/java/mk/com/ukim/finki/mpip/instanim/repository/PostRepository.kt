@@ -9,6 +9,7 @@ import mk.com.ukim.finki.mpip.instanim.data.entity.Post
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
 
 object PostRepository {
+
     private val postDb: DatabaseReference = Firebase.database.reference.child("posts")
 
     suspend fun getPosts(): Resource<List<Post>> {

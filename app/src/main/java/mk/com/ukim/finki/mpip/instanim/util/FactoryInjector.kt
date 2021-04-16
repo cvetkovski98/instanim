@@ -6,10 +6,11 @@ import mk.com.ukim.finki.mpip.instanim.factories.PostViewModelFactory
 import mk.com.ukim.finki.mpip.instanim.repository.AuthRepository
 import mk.com.ukim.finki.mpip.instanim.repository.PostRepository
 import mk.com.ukim.finki.mpip.instanim.repository.StorageRepository
+import mk.com.ukim.finki.mpip.instanim.repository.UserRepository
 
 object FactoryInjector {
     fun getAuthViewModel(): AuthViewModelFactory {
-        return AuthViewModelFactory(AuthRepository)
+        return AuthViewModelFactory(AuthRepository, UserRepository)
     }
 
     fun getPostViewModel(): PostViewModelFactory {

@@ -35,6 +35,7 @@ class PostAdapter(
     fun setPosts(posts: List<Post>) {
         this.posts.clear()
         this.posts.addAll(posts)
+        notifyDataSetChanged()
     }
 
     inner class PostViewHolder : RecyclerView.ViewHolder(binder.root) {

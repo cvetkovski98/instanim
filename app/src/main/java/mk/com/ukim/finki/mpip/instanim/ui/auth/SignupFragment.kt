@@ -50,7 +50,7 @@ class SignupFragment : Fragment() {
     }
 
     private fun redirectToHome() {
-        val action = SignupFragmentDirections.actionSignupFragmentToPostListFragment()
+        val action = SignupFragmentDirections.actionSignupFragmentToMainActivity()
         findNavController().navigate(action)
     }
 

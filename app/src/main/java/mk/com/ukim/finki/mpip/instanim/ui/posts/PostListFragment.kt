@@ -19,7 +19,6 @@ import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 class PostListFragment : Fragment() {
     private lateinit var binding: FragmentPostListBinding
     private lateinit var postAdapter: PostAdapter
-    private val TAG = "PostListFragment"
 
     private val authViewModel: AuthViewModel by activityViewModels {
         FactoryInjector.getAuthViewModel()
@@ -42,19 +41,7 @@ class PostListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
 
-        authViewModel.fetchCurrentUser()
         postListViewModel.fetchPosts()
-
-        authViewModel.currentUser.observe(viewLifecycleOwner, {
-            when (it.status) {
-                Status.ERROR -> {
-                    navigateToLogin()
-                }
-                else -> {
-                    // do nothing
-                }
-            }
-        })
 
         postListViewModel.posts.observe(viewLifecycleOwner, {
             when (it.status) {
@@ -88,18 +75,11 @@ class PostListFragment : Fragment() {
 
     private fun updateAdapterData(posts: List<Post>) {
         postAdapter.setPosts(posts)
-        postAdapter.notifyDataSetChanged()
     }
 
     private fun navigateToDetails(postId: String) {
         val action = PostListFragmentDirections.actionPostListFragmentToPostDetailsFragment(postId)
         findNavController().navigate(action)
     }
-
-    private fun navigateToLogin() {
-        val action = PostListFragmentDirections.actionPostListFragmentToLoginFragment()
-        findNavController().navigate(action)
-    }
-
 
 }

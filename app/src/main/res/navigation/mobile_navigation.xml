@@ -10,38 +10,8 @@
         android:label="Instanim"
         tools:layout="@layout/fragment_post_list">
         <action
-            android:id="@+id/action_postListFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
-        <action
-            android:id="@+id/action_postListFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_postListFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_postListFragment_to_postDetailsFragment"
             app:destination="@id/postDetailsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/signupFragment"
-        android:name="mk.com.ukim.finki.mpip.instanim.ui.auth.SignupFragment"
-        android:label="Signup"
-        tools:layout="@layout/fragment_signup">
-        <action
-            android:id="@+id/action_signupFragment_to_postListFragment"
-            app:destination="@id/postListFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="mk.com.ukim.finki.mpip.instanim.ui.auth.LoginFragment"
-        android:label="Login"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_loginFragment_to_signupFragment"
-            app:destination="@id/signupFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_postListFragment"
-            app:destination="@id/postListFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -73,7 +43,11 @@
         android:label="Finish Post"
         tools:layout="@layout/fragment_create_post" >
         <action
+            app:popUpTo="@id/postListFragment"
             android:id="@+id/action_createPostFragment_to_postListFragment"
             app:destination="@id/postListFragment" />
+        <argument
+            android:name="imageUri"
+            app:argType="android.net.Uri" />
     </fragment>
 </navigation>

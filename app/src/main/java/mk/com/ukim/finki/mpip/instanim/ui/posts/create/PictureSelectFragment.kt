@@ -8,20 +8,16 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import mk.com.ukim.finki.mpip.instanim.databinding.FragmentPictureSelectBinding
-import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class PictureSelectFragment : Fragment() {
 
     private lateinit var binding: FragmentPictureSelectBinding
-    private lateinit var imageUri: Uri
-    private val viewModel: PostCreateViewModel by activityViewModels {
-        FactoryInjector.getPostCreateViewModel()
-    }
+    private var imageUri: Uri? = null
 
     private val pickPhotoAction =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -29,7 +25,6 @@ class PictureSelectFragment : Fragment() {
                 imageUri = it.data?.data as Uri
 
                 binding.uploadImageView.setImageURI(imageUri)
-                viewModel.setPostUri(imageUri.toString())
             }
         }
 
@@ -60,9 +55,17 @@ class PictureSelectFragment : Fragment() {
     }
 
     private fun handleNext() {
-        val action =
-            PictureSelectFragmentDirections.actionPictureSelectFragmentToCreatePostFragment()
-        findNavController().navigate(action)
+        imageUri?.let {
+            val action =
+                PictureSelectFragmentDirections.actionPictureSelectFragmentToCreatePostFragment(it)
+            findNavController().navigate(action)
+        } ?: run {
+            Toast.makeText(
+                context,
+                "Please select an image",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
 }

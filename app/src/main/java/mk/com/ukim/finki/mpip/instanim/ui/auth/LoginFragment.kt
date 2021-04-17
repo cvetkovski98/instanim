@@ -67,7 +67,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun redirectToHome() {
-        val action = LoginFragmentDirections.actionLoginFragmentToPostListFragment()
+        val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
         findNavController().navigate(action)
     }
 

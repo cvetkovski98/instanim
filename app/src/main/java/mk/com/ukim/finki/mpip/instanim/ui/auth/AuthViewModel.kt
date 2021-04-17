@@ -23,11 +23,7 @@ class AuthViewModel(
 
     fun fetchCurrentUser() {
         _currentUser.value = Resource.loading(null)
-        viewModelScope.launch(IO) {
-            _currentUser.postValue(
-                authRepository.currentUser()
-            )
-        }
+        _currentUser.value = authRepository.currentUser()
     }
 
     fun signInUser(email: String?, password: String?) {
@@ -37,8 +33,8 @@ class AuthViewModel(
             _currentUser.value = Resource.error(null, "Email or password is blank")
         } else {
             viewModelScope.launch(IO) {
-                val user = authRepository.signIn(email, password)
-                _currentUser.postValue(user)
+                val authUser = authRepository.signIn(email, password)
+                _currentUser.postValue(authUser)
             }
         }
     }
@@ -57,27 +53,46 @@ class AuthViewModel(
             _currentUser.value = Resource.error(null, "Email or password is blank")
         } else {
             viewModelScope.launch(IO) {
-                val authUser = authRepository.signUp(email, password)
+                // create auth user
+                val authUserResource = authRepository.signUp(email, password)
 
-                when (authUser.status) {
-                    Status.SUCCESS -> {
-                        authUser.data?.let {
-                            val user = User(
-                                uid = authUser.data.uid,
-                                username = username,
-                                description = "",
-                                follows = listOf(),
-                                followedBy = listOf()
-                            )
-                            userRepository.createUser(user) // TODO: handle response
+                if (authUserResource.status == Status.SUCCESS) {
+                    // auth user creation successful
+                    val user = User(
+                        username = username,
+                        description = "",
+                        follows = listOf(),
+                        followedBy = listOf()
+                    )
+
+                    // create app user
+                    val appUserResource =
+                        userRepository.createUser(authUserResource.data!!.uid, user)
+
+                    if (appUserResource.status != Status.SUCCESS) {
+                        // app user creation failed & delete auth user
+                        authUserResource.data.delete()
+                        lateinit var resultMessage: String
+                        authUserResource.message?.let {
+                            resultMessage = it
+                        } ?: run {
+                            resultMessage = "There was an error creating an application user"
                         }
+                        _currentUser.postValue(
+                            Resource.error(null, resultMessage)
+                        )
+                    } else {
+                        // both succeeded return result
+                        _currentUser.postValue(
+                            authUserResource
+                        )
                     }
-                    else -> {
-                        // do nothing
-                    }
+                } else {
+                    // auth user creation failed & return result
+                    _currentUser.postValue(
+                        authUserResource
+                    )
                 }
-
-                _currentUser.postValue(authUser)
             }
         }
     }

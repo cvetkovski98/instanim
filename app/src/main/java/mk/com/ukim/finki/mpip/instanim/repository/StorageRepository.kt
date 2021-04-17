@@ -15,16 +15,25 @@ object StorageRepository {
         lateinit var resource: Resource<Unit>
 
         val target = storageRef.child(targetUri)
-
         val uploadTask = target.putFile(localUri)
 
-        uploadTask.addOnSuccessListener {
-            resource = Resource.success(Unit)
-        }.addOnFailureListener {
-            it.message?.let { msg ->
-                resource = Resource.error(null, msg)
+        try {
+            uploadTask.addOnSuccessListener {
+                resource = Resource.success(Unit)
+            }.addOnFailureListener {
+                it.message?.let { msg ->
+                    resource = Resource.error(null, msg)
+                } ?: run {
+                    resource = Resource.error(null, "There was an error uploading the photo")
+                }
+            }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error uploading the photo"
             }
-        }.await()
+            resource = Resource.error(null, message)
+        }
 
         return resource
     }
@@ -34,13 +43,21 @@ object StorageRepository {
 
         val target = storageRef.child(targetUri)
 
-        target.downloadUrl.addOnSuccessListener {
-            resource = Resource.success(it.toString())
-        }.addOnFailureListener {
-            it.message?.let { msg ->
-                resource = Resource.error(null, msg)
+        try {
+            target.downloadUrl.addOnSuccessListener {
+                resource = Resource.success(it.toString())
+            }.addOnFailureListener {
+                it.message?.let { msg ->
+                    resource = Resource.error(null, msg)
+                }
+            }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error getting the download Uri of the photo"
             }
-        }.await()
+            resource = Resource.error(null, message)
+        }
 
         return resource
     }

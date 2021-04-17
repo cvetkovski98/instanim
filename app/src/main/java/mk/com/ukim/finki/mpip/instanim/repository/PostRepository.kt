@@ -15,8 +15,8 @@ object PostRepository {
     suspend fun getPosts(): Resource<List<Post>> {
         lateinit var resource: Resource<List<Post>>
 
-        postDb.get()
-            .addOnSuccessListener {
+        try {
+            postDb.get().addOnSuccessListener {
                 val idPostMap = it.getValue<Map<String, Post>>()
                 resource = if (idPostMap != null) {
                     Resource.success(idPostMap.values.toList())
@@ -27,9 +27,16 @@ object PostRepository {
                 it.message?.let { msg ->
                     resource = Resource.error(null, msg)
                 } ?: run {
-                    resource = Resource.error(null, "There was an error creating the post")
+                    resource = Resource.error(null, "There was an error fetching the posts")
                 }
             }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error fetching the posts"
+            }
+            resource = Resource.error(null, message)
+        }
 
         return resource
     }
@@ -37,8 +44,8 @@ object PostRepository {
     suspend fun getPost(postId: String): Resource<Post> {
         lateinit var resource: Resource<Post>
 
-        postDb.child(postId).get()
-            .addOnSuccessListener {
+        try {
+            postDb.child(postId).get().addOnSuccessListener {
                 val post = it.getValue<Post>()
                 resource = if (post != null) {
                     Resource.success(post)
@@ -49,9 +56,16 @@ object PostRepository {
                 it.message?.let { msg ->
                     resource = Resource.error(null, msg)
                 } ?: run {
-                    resource = Resource.error(null, "There was an error creating the post")
+                    resource = Resource.error(null, "There was an error fetching the post")
                 }
             }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error fetching the post"
+            }
+            resource = Resource.error(null, message)
+        }
 
         return resource
     }
@@ -59,18 +73,23 @@ object PostRepository {
     suspend fun createPost(post: Post): Resource<Unit> {
         lateinit var resource: Resource<Unit>
 
-        postDb.child(post.postId)
-            .setValue(post)
-            .addOnSuccessListener {
+        try {
+            postDb.child(post.postId).setValue(post).addOnSuccessListener {
                 resource = Resource.success(Unit)
-            }
-            .addOnFailureListener {
+            }.addOnFailureListener {
                 it.message?.let { msg ->
                     resource = Resource.error(null, msg)
                 } ?: run {
                     resource = Resource.error(null, "There was an error creating the post")
                 }
             }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error creating the post"
+            }
+            resource = Resource.error(null, message)
+        }
 
         return resource
     }
@@ -83,17 +102,23 @@ object PostRepository {
             post.postId to postValues
         )
 
-        postDb.updateChildren(update)
-            .addOnSuccessListener {
+        try {
+            postDb.updateChildren(update).addOnSuccessListener {
                 resource = Resource.success(Unit)
-            }
-            .addOnFailureListener {
+            }.addOnFailureListener {
                 it.message?.let { msg ->
                     resource = Resource.error(null, msg)
                 } ?: run {
                     resource = Resource.error(null, "There was an error updating the post")
                 }
             }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error creating the post"
+            }
+            resource = Resource.error(null, message)
+        }
 
         return resource
     }
@@ -102,18 +127,23 @@ object PostRepository {
     suspend fun removePost(postId: String): Resource<Unit> {
         lateinit var resource: Resource<Unit>
 
-        postDb.child(postId)
-            .removeValue()
-            .addOnSuccessListener {
+        try {
+            postDb.child(postId).removeValue().addOnSuccessListener {
                 resource = Resource.success(Unit)
-            }
-            .addOnFailureListener {
+            }.addOnFailureListener {
                 it.message?.let { msg ->
                     resource = Resource.error(null, msg)
                 } ?: run {
                     resource = Resource.error(null, "There was an error removing the post")
                 }
             }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error removing the post"
+            }
+            resource = Resource.error(null, message)
+        }
 
         return resource
     }

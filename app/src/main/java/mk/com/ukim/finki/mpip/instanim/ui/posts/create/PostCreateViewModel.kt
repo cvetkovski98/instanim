@@ -9,11 +9,13 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import mk.com.ukim.finki.mpip.instanim.data.model.PostBuilder
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
+import mk.com.ukim.finki.mpip.instanim.repository.AuthRepository
 import mk.com.ukim.finki.mpip.instanim.repository.PostRepository
 import mk.com.ukim.finki.mpip.instanim.repository.StorageRepository
 import mk.com.ukim.finki.mpip.instanim.util.Util
 
 class PostCreateViewModel(
+    authRepository: AuthRepository,
     private val postRepository: PostRepository,
     private val storageRepository: StorageRepository
 ) : ViewModel() {
@@ -28,9 +30,10 @@ class PostCreateViewModel(
         get() = _createResult
 
     init {
+        val currentUser = authRepository.currentUser()
         _postBuilder = PostBuilder(
             postId = Util.generateId(),
-            userId = "cvetkovski98" // TODO: fix with user management
+            userId = currentUser.data!!.uid
         )
     }
 

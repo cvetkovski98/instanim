@@ -44,6 +44,7 @@
         tools:layout="@layout/fragment_create_post" >
         <action
             app:popUpTo="@id/postListFragment"
+            app:popUpToInclusive="true"
             android:id="@+id/action_createPostFragment_to_postListFragment"
             app:destination="@id/postListFragment" />
         <argument

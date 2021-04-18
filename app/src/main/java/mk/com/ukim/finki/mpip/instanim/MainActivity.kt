@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.postListFragment,
                 R.id.profileFragment,
-                R.id.pictureSelectFragment
+                R.id.pictureSelectFragment,
+                R.id.mapsFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -51,4 +51,8 @@
             android:name="imageUri"
             app:argType="android.net.Uri" />
     </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="mk.com.ukim.finki.mpip.instanim.ui.maps.MapsFragment"
+        android:label="MapsFragment" />
 </navigation>

@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="Create" />
 
+    <item
+        android:id="@+id/mapsFragment"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="Maps" />
+
 </menu>

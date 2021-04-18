@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,16 +12,14 @@ import mk.com.ukim.finki.mpip.instanim.adapter.PostAdapter
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
 import mk.com.ukim.finki.mpip.instanim.data.model.Status
 import mk.com.ukim.finki.mpip.instanim.databinding.FragmentPostListBinding
-import mk.com.ukim.finki.mpip.instanim.ui.auth.AuthViewModel
 import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class PostListFragment : Fragment() {
-    private lateinit var binding: FragmentPostListBinding
-    private lateinit var postAdapter: PostAdapter
+    private var _binding: FragmentPostListBinding? = null
+    private val binding
+        get() = _binding!!
 
-    private val authViewModel: AuthViewModel by activityViewModels {
-        FactoryInjector.getAuthViewModel()
-    }
+    private lateinit var postAdapter: PostAdapter
 
     private val postListViewModel: PostViewModel by viewModels {
         FactoryInjector.getPostViewModel()
@@ -33,7 +30,7 @@ class PostListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPostListBinding.inflate(inflater, container, false)
+        _binding = FragmentPostListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -80,6 +77,11 @@ class PostListFragment : Fragment() {
     private fun navigateToDetails(postId: String) {
         val action = PostListFragmentDirections.actionPostListFragmentToPostDetailsFragment(postId)
         findNavController().navigate(action)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

@@ -13,7 +13,10 @@ import mk.com.ukim.finki.mpip.instanim.databinding.FragmentPostDetailsBinding
 import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class PostDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentPostDetailsBinding
+    private var _binding: FragmentPostDetailsBinding? = null
+    private val binding
+        get() = _binding!!
+
     private val args: PostDetailsFragmentArgs by navArgs()
 
     private val viewModel: PostViewModel by viewModels {
@@ -24,7 +27,7 @@ class PostDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPostDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentPostDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,6 +53,11 @@ class PostDetailsFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

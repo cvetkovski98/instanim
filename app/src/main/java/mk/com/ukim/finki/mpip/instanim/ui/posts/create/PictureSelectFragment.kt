@@ -16,7 +16,10 @@ import mk.com.ukim.finki.mpip.instanim.databinding.FragmentPictureSelectBinding
 
 class PictureSelectFragment : Fragment() {
 
-    private lateinit var binding: FragmentPictureSelectBinding
+    private var _binding: FragmentPictureSelectBinding? = null
+    private val binding
+        get() = _binding!!
+
     private var imageUri: Uri? = null
 
     private val pickPhotoAction =
@@ -32,7 +35,7 @@ class PictureSelectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPictureSelectBinding.inflate(inflater, container, false)
+        _binding = FragmentPictureSelectBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -66,6 +69,11 @@ class PictureSelectFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

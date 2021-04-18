@@ -12,16 +12,19 @@ import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class ProfileFragment : Fragment() {
 
+    private var _binding: FragmentProfileBinding? = null
+    private val binding
+        get() = _binding!!
+
     private val authViewModel: AuthViewModel by activityViewModels {
         FactoryInjector.getAuthViewModel()
     }
-    private lateinit var binding: FragmentProfileBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -32,4 +35,8 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

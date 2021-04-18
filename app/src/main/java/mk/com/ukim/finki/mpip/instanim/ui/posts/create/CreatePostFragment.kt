@@ -14,7 +14,10 @@ import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class CreatePostFragment : Fragment() {
 
-    private lateinit var binding: FragmentCreatePostBinding
+    private var _binding: FragmentCreatePostBinding? = null
+    private val binding
+        get() = _binding!!
+
     private val args: CreatePostFragmentArgs by navArgs()
 
     private val viewModel: PostCreateViewModel by viewModels {
@@ -25,7 +28,7 @@ class CreatePostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+        _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -63,5 +66,10 @@ class CreatePostFragment : Fragment() {
         val uri = args.imageUri
 
         viewModel.createPost(description, location, uri)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

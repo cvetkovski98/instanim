@@ -54,5 +54,9 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.maps.MapsFragment"
-        android:label="MapsFragment" />
+        android:label="MapsFragment" >
+        <action
+            android:id="@+id/action_mapsFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+    </fragment>
 </navigation>

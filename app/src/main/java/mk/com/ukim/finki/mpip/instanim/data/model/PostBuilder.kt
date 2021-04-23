@@ -6,7 +6,8 @@ class PostBuilder(
     var postId: String = "",
     var userId: String? = null,
     var createdAt: Long? = null,
-    var location: String? = null,
+    var lat: Double? = null,
+    var lng: Double? = null,
     var description: String? = null,
     var imageUri: String? = null,
 ) {
@@ -16,7 +17,8 @@ class PostBuilder(
             postId = postId,
             userId = userId,
             createdAt = createdAt,
-            location = location,
+            lat = lat,
+            lng = lng,
             description = description,
             imageUri = imageUri.toString()
         )

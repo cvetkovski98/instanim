@@ -24,7 +24,7 @@ class PostCreateViewModel(
     val createResult: LiveData<Resource<Unit>>
         get() = _createResult
 
-    fun createPost(description: String, location: String, localUri: Uri) {
+    fun createPost(description: String, lat: Double, lng: Double, localUri: Uri) {
         _createResult.value = Resource.loading(Unit)
 
         val currentUser = authRepository.currentUser()
@@ -45,7 +45,8 @@ class PostCreateViewModel(
                 userId = userId,
                 createdAt = System.currentTimeMillis() / 1000,
                 description = description,
-                location = location,
+                lat = lat,
+                lng = lng,
                 imageUri = imageUri
             )
 

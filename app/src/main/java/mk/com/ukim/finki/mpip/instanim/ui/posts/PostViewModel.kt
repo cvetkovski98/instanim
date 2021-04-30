@@ -8,21 +8,27 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
+import mk.com.ukim.finki.mpip.instanim.repository.AuthRepository
 import mk.com.ukim.finki.mpip.instanim.repository.PostRepository
 import mk.com.ukim.finki.mpip.instanim.repository.StorageRepository
 
 class PostViewModel(
     private val postRepository: PostRepository,
-    private val storageRepository: StorageRepository
+    private val storageRepository: StorageRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val _posts = MutableLiveData<Resource<List<Post>>>()
     private val _post = MutableLiveData<Resource<Post>>()
+    private val _updatePostStatus = MutableLiveData<Resource<Unit>>()
 
     val posts: LiveData<Resource<List<Post>>>
         get() = _posts
 
     val post: LiveData<Resource<Post>>
         get() = _post
+
+    val updatePostStatus: LiveData<Resource<Unit>>
+        get() = _updatePostStatus
 
     fun fetchPosts() {
         _posts.value = Resource.loading(null)
@@ -38,6 +44,16 @@ class PostViewModel(
         viewModelScope.launch(IO) {
             _post.postValue(
                 postRepository.getPost(postId)
+            )
+        }
+    }
+
+    fun likePost(post: Post) {
+        _updatePostStatus.value = Resource.loading(null)
+        authRepository.currentUser().data?.uid?.let { post.likedBy.add(it) }
+        viewModelScope.launch(IO) {
+            _updatePostStatus.postValue(
+                postRepository.updatePost(post)
             )
         }
     }

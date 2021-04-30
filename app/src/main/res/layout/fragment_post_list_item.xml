@@ -30,7 +30,7 @@
         android:id="@+id/like_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Like"
+        android:text="@string/like_string"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/some_text" />
 
@@ -38,7 +38,7 @@
         android:id="@+id/comment_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Comment"
+        android:text="@string/comment_string"
         app:layout_constraintStart_toEndOf="@+id/like_button"
         app:layout_constraintTop_toBottomOf="@+id/some_text" />
 
@@ -46,7 +46,7 @@
         android:id="@+id/details_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Details"
+        android:text="@string/details_string"
         app:layout_constraintStart_toEndOf="@+id/comment_button"
         app:layout_constraintTop_toBottomOf="@+id/some_text" />
 

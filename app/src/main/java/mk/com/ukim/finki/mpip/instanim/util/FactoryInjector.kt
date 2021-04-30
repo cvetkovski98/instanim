@@ -14,7 +14,7 @@ object FactoryInjector {
     }
 
     fun getPostViewModel(): PostViewModelFactory {
-        return PostViewModelFactory(PostRepository, StorageRepository)
+        return PostViewModelFactory(PostRepository, StorageRepository, AuthRepository)
     }
 
     fun getPostCreateViewModel(): PostCreateViewModelFactory {

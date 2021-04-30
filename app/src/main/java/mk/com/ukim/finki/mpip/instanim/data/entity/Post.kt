@@ -12,7 +12,7 @@ data class Post(
     val lng: Double? = null,
     val description: String? = null,
     val imageUri: String? = null,
-    val likedBy: List<Int> = listOf(),
+    val likedBy: MutableList<String> = mutableListOf(),
     val comments: List<Int> = listOf()
 ) {
     @Exclude

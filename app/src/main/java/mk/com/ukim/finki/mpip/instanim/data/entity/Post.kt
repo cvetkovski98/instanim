@@ -8,10 +8,11 @@ data class Post(
     val postId: String = "",
     val userId: String? = null,
     val createdAt: Long? = null,
-    val location: String? = null,
+    val lat: Double? = null,
+    val lng: Double? = null,
     val description: String? = null,
     val imageUri: String? = null,
-    val likedBy: List<Int> = listOf(),
+    val likedBy: MutableList<String> = mutableListOf(),
     val comments: List<Int> = listOf()
 ) {
     @Exclude
@@ -20,7 +21,8 @@ data class Post(
             "postId" to postId,
             "userId" to userId,
             "createdAt" to createdAt,
-            "location" to location,
+            "lat" to lat,
+            "lng" to lng,
             "description" to description,
             "imageUri" to imageUri,
             "likedBy" to likedBy,

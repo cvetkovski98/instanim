@@ -13,7 +13,7 @@ data class Post(
     val description: String? = null,
     val imageUri: String? = null,
     val likedBy: MutableList<String> = mutableListOf(),
-    val comments: List<Int> = listOf()
+    val comments: MutableList<Comment> = mutableListOf()
 ) {
     @Exclude
     fun toMap(): Map<String, Any?> {

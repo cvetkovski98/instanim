@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import mk.com.ukim.finki.mpip.instanim.data.entity.Comment
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
 import mk.com.ukim.finki.mpip.instanim.repository.AuthRepository
@@ -50,7 +51,25 @@ class PostViewModel(
 
     fun likePost(post: Post) {
         _updatePostStatus.value = Resource.loading(null)
-        authRepository.currentUser().data?.uid?.let { post.likedBy.add(it) }
+        authRepository.currentUser().data?.uid?.let {
+            if (post.likedBy.contains(it))
+                post.likedBy.remove(it)
+            else
+                post.likedBy.add(it)
+        }
+        viewModelScope.launch(IO) {
+            _updatePostStatus.postValue(
+                postRepository.updatePost(post)
+            )
+        }
+    }
+
+    fun postComment(post: Post, comment: String) {
+        _updatePostStatus.value = Resource.loading(null)
+        authRepository.currentUser().data?.uid?.let {
+            val commentToBePosted = Comment(it, comment)
+            post.comments.add(commentToBePosted)
+        }
         viewModelScope.launch(IO) {
             _updatePostStatus.postValue(
                 postRepository.updatePost(post)

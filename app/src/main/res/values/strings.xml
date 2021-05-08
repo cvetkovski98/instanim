@@ -15,4 +15,5 @@
     <string name="details_string">Details</string>
     <string name="image_from_post">Image from post</string>
     <string name="username_string">Username</string>
+    <string name="your_comment_placeholder">Your comment</string>
 </resources>

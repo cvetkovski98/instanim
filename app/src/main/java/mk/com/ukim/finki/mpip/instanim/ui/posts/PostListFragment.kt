@@ -61,9 +61,12 @@ class PostListFragment : Fragment() {
     }
 
     private fun initRecycler() {
+        authViewModel.fetchCurrentUser()
         postAdapter = PostAdapter(
+            authViewModel.currentUser.value?.data?.uid.toString(),
             mutableListOf(), // empty list
-        ) { id -> navigateToDetails(id) }
+            likePost = {post -> likePost(post)},
+            onDetails = {id -> navigateToDetails(id)})
 
         val llm = LinearLayoutManager(context)
 
@@ -80,6 +83,10 @@ class PostListFragment : Fragment() {
     private fun navigateToDetails(postId: String) {
         val action = PostListFragmentDirections.actionPostListFragmentToPostDetailsFragment(postId)
         findNavController().navigate(action)
+    }
+
+    private fun likePost(post: Post){
+        postListViewModel.likePost(post)
     }
 
 }

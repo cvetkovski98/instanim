@@ -26,6 +26,14 @@ class CommentAdapter(
 
     override fun getItemCount(): Int = comments.size
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     fun setComments(comments: List<Comment>) {
         this.comments.clear()
         this.comments.addAll(comments)

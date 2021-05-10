@@ -5,20 +5,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import mk.com.ukim.finki.mpip.instanim.R
+import mk.com.ukim.finki.mpip.instanim.adapter.CommentAdapter
+import mk.com.ukim.finki.mpip.instanim.data.entity.Comment
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
 import mk.com.ukim.finki.mpip.instanim.data.model.Status
 import mk.com.ukim.finki.mpip.instanim.databinding.FragmentPostDetailsBinding
 import mk.com.ukim.finki.mpip.instanim.glide.GlideApp
+import mk.com.ukim.finki.mpip.instanim.ui.auth.AuthViewModel
 import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import mk.com.ukim.finki.mpip.instanim.adapter.CommentAdapter
 import mk.com.ukim.finki.mpip.instanim.data.entity.Comment
+
 
 class PostDetailsFragment : Fragment() {
     private var _binding: FragmentPostDetailsBinding? = null
@@ -27,6 +37,10 @@ class PostDetailsFragment : Fragment() {
 
     private lateinit var commentAdapter: CommentAdapter
     private val args: PostDetailsFragmentArgs by navArgs()
+
+    private val authViewModel: AuthViewModel by activityViewModels {
+        FactoryInjector.getAuthViewModel()
+    }
 
     private val viewModel: PostViewModel by viewModels {
         FactoryInjector.getPostViewModel()
@@ -67,7 +81,7 @@ class PostDetailsFragment : Fragment() {
                 Status.SUCCESS -> {
                     postId?.let {
                         viewModel.fetchPost(postId)
-                        binding.commentText.text.clear()
+                        binding.commentText.editText?.text?.clear()
                         binding.commentText.clearFocus()
                         val inputManager =
                             context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -91,16 +105,26 @@ class PostDetailsFragment : Fragment() {
         binding.descriptionPostDetails.text = post.description
         binding.likesPostDetails.text = resources.getString(R.string.liked_by, post.likedBy.size)
         updateAdapterData(post.comments.filterNotNull())
+        binding.usernameTextView.text = post.userId
         binding.likeButton.setOnClickListener {
             viewModel.likePost(post)
         }
         binding.commentButton.setOnClickListener {
-            if (binding.commentText.text.isNotEmpty()) {
-                viewModel.postComment(post, binding.commentText.text.toString())
+            if (binding.commentText.editText?.text?.isNotEmpty() == true) {
+                viewModel.postComment(post, binding.commentText.editText?.text.toString())
             } else {
                 Toast.makeText(context, "Please write your comment first", Toast.LENGTH_SHORT)
                     .show()
             }
+        }
+        binding.mapsButton.setOnClickListener {
+            navigateToMapPostDetails(post)
+        }
+        authViewModel.fetchCurrentUser()
+        if (post.likedBy.contains(authViewModel.currentUser.value?.data?.uid)){
+            binding.likeButton.text = "Unlike"
+        } else {
+            binding.likeButton.text = "Like"
         }
     }
 
@@ -108,7 +132,12 @@ class PostDetailsFragment : Fragment() {
         commentAdapter = CommentAdapter()
 
         val llm = LinearLayoutManager(context)
-
+        binding.commentRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                binding.commentRecyclerView.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         binding.commentRecyclerView.apply {
             adapter = commentAdapter
             layoutManager = llm
@@ -117,6 +146,13 @@ class PostDetailsFragment : Fragment() {
 
     private fun updateAdapterData(comments: List<Comment>) {
         commentAdapter.setComments(comments)
+    }
+
+    private fun navigateToMapPostDetails(post: Post){
+        val action = PostDetailsFragmentDirections.actionPostDetailsFragmentToPostDetailsMapsFragment(post.lat.toString(), post.lng.toString(),
+            post.description.toString()
+        )
+        findNavController().navigate(action)
     }
 
     override fun onDestroy() {

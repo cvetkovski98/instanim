@@ -8,17 +8,17 @@
 
     <item
         android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_profile_24dp"
         android:title="@string/title_profile" />
 
     <item
         android:id="@+id/pictureSelectFragment"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="Create" />
+        android:icon="@drawable/ic_post_24dp"
+        android:title="@string/title_post" />
 
     <item
         android:id="@+id/mapsFragment"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="Maps" />
+        android:icon="@drawable/ic_maps_24dp"
+        android:title="@string/title_maps" />
 
 </menu>

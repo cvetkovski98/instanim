@@ -27,6 +27,9 @@
             android:name="postId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_postDetailsFragment_to_postDetailsMapsFragment"
+            app:destination="@id/postDetailsMapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/pictureSelectFragment"
@@ -58,5 +61,19 @@
         <action
             android:id="@+id/action_mapsFragment_to_postDetailsFragment"
             app:destination="@id/postDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailsMapsFragment"
+        android:name="mk.com.ukim.finki.mpip.instanim.ui.posts.PostDetailsMapsFragment"
+        android:label="PostDetailsMapsFragment" >
+        <argument
+            android:name="lat"
+            app:argType="string" />
+        <argument
+            android:name="lng"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -1,6 +1,8 @@
 package mk.com.ukim.finki.mpip.instanim.repository
 
+import android.util.Log
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.Query
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -17,6 +19,36 @@ object PostRepository {
 
         try {
             postDb.get().addOnSuccessListener {
+                val idPostMap = it.getValue<Map<String, Post>>()
+                resource = if (idPostMap != null) {
+                    Resource.success(idPostMap.values.toList())
+                } else {
+                    Resource.error(null, "Post not found")
+                }
+            }.addOnFailureListener {
+                it.message?.let { msg ->
+                    resource = Resource.error(null, msg)
+                } ?: run {
+                    resource = Resource.error(null, "There was an error fetching the posts")
+                }
+            }.await()
+        } catch (e: Exception) {
+            var message = e.message
+            if (message == null) {
+                message = "There was an error fetching the posts"
+            }
+            resource = Resource.error(null, message)
+        }
+
+        return resource
+    }
+
+    suspend fun getPosts(userId: String): Resource<List<Post>> {
+        lateinit var resource: Resource<List<Post>>
+        val query: Query = postDb.orderByChild("userId").equalTo(userId)
+
+        try {
+            query.get().addOnSuccessListener {
                 val idPostMap = it.getValue<Map<String, Post>>()
                 resource = if (idPostMap != null) {
                     Resource.success(idPostMap.values.toList())

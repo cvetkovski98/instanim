@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -33,7 +32,9 @@ class CreatePostFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
         val sydney = LatLng(-34.0, 100.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney").draggable(true))
+        googleMap.addMarker(
+            MarkerOptions().position(sydney).title("Marker in Sydney").draggable(true)
+        )
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         googleMap.setOnMarkerDragListener(myMapHandler)
     }

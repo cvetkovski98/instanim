@@ -17,7 +17,19 @@
         android:id="@+id/profileFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.profile.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
+        <argument
+            android:name="profileUid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/postDetailsFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.posts.PostDetailsFragment"
@@ -44,7 +56,7 @@
         android:id="@+id/createPostFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.posts.create.CreatePostFragment"
         android:label="Finish Post"
-        tools:layout="@layout/fragment_create_post" >
+        tools:layout="@layout/fragment_create_post">
         <action
             app:popUpTo="@id/postListFragment"
             app:popUpToInclusive="true"
@@ -57,7 +69,7 @@
     <fragment
         android:id="@+id/mapsFragment"
         android:name="mk.com.ukim.finki.mpip.instanim.ui.maps.MapsFragment"
-        android:label="MapsFragment" >
+        android:label="MapsFragment">
         <action
             android:id="@+id/action_mapsFragment_to_postDetailsFragment"
             app:destination="@id/postDetailsFragment" />
@@ -76,4 +88,9 @@
             android:name="description"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="mk.com.ukim.finki.mpip.instanim.ui.profile.UpdateProfileFragment"
+        android:label="fragment_update_profile"
+        tools:layout="@layout/fragment_update_profile" />
 </navigation>

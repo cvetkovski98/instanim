@@ -14,16 +14,19 @@ import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class LoginFragment : Fragment() {
 
+    private var _binding: FragmentLoginBinding? = null
+    private val binding
+        get() = _binding!!
+
     private val authViewModel: AuthViewModel by activityViewModels {
         FactoryInjector.getAuthViewModel()
     }
-    private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -74,6 +77,11 @@ class LoginFragment : Fragment() {
     private fun redirectToSignUp() {
         val action = LoginFragmentDirections.actionLoginFragmentToSignupFragment()
         findNavController().navigate(action)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

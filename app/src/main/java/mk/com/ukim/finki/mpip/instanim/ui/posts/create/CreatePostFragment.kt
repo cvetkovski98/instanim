@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,13 +23,18 @@ import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class CreatePostFragment : Fragment() {
 
-    private lateinit var binding: FragmentCreatePostBinding
+    private var _binding: FragmentCreatePostBinding? = null
+    private val binding
+        get() = _binding!!
+
     private val args: CreatePostFragmentArgs by navArgs()
     private val myMapHandler: MyMapHandler = MyMapHandler()
 
     private val callback = OnMapReadyCallback { googleMap ->
         val sydney = LatLng(-34.0, 100.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney").draggable(true))
+        googleMap.addMarker(
+            MarkerOptions().position(sydney).title("Marker in Sydney").draggable(true)
+        )
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         googleMap.setOnMarkerDragListener(myMapHandler)
     }
@@ -43,7 +47,7 @@ class CreatePostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+        _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -86,6 +90,11 @@ class CreatePostFragment : Fragment() {
         val uri = args.imageUri
 
         viewModel.createPost(description, lat, lng, uri)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
 

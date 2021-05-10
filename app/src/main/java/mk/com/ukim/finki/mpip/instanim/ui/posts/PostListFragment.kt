@@ -17,7 +17,10 @@ import mk.com.ukim.finki.mpip.instanim.ui.auth.AuthViewModel
 import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 class PostListFragment : Fragment() {
-    private lateinit var binding: FragmentPostListBinding
+    private var _binding: FragmentPostListBinding? = null
+    private val binding
+        get() = _binding!!
+
     private lateinit var postAdapter: PostAdapter
 
     private val authViewModel: AuthViewModel by activityViewModels {
@@ -33,7 +36,7 @@ class PostListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPostListBinding.inflate(inflater, container, false)
+        _binding = FragmentPostListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -87,6 +90,11 @@ class PostListFragment : Fragment() {
 
     private fun likePost(post: Post){
         postListViewModel.likePost(post)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

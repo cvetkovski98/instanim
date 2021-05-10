@@ -26,7 +26,10 @@ import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
 
 class PostDetailsFragment : Fragment() {
-    private lateinit var binding: FragmentPostDetailsBinding
+    private var _binding: FragmentPostDetailsBinding? = null
+    private val binding
+        get() = _binding!!
+
     private lateinit var commentAdapter: CommentAdapter
     private val args: PostDetailsFragmentArgs by navArgs()
 
@@ -42,7 +45,7 @@ class PostDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPostDetailsBinding.inflate(inflater, container, false)
+        _binding = FragmentPostDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -113,7 +116,7 @@ class PostDetailsFragment : Fragment() {
             navigateToMapPostDetails(post)
         }
         authViewModel.fetchCurrentUser()
-        if (post.likedBy.contains(authViewModel.currentUser.value?.data?.uid)){
+        if (post.likedBy.contains(authViewModel.currentUser.value?.data?.uid)) {
             binding.likeButton.text = "Unlike"
         } else {
             binding.likeButton.text = "Like"
@@ -140,11 +143,18 @@ class PostDetailsFragment : Fragment() {
         commentAdapter.setComments(comments)
     }
 
-    private fun navigateToMapPostDetails(post: Post){
-        val action = PostDetailsFragmentDirections.actionPostDetailsFragmentToPostDetailsMapsFragment(post.lat.toString(), post.lng.toString(),
-            post.description.toString()
-        )
+    private fun navigateToMapPostDetails(post: Post) {
+        val action =
+            PostDetailsFragmentDirections.actionPostDetailsFragmentToPostDetailsMapsFragment(
+                post.lat.toString(), post.lng.toString(),
+                post.description.toString()
+            )
         findNavController().navigate(action)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

@@ -37,6 +37,14 @@ class ProfilePostsAdapter(
 
     override fun getItemCount(): Int = posts.size
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     inner class ProfilePostsViewHolder : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) {
             binding.apply {

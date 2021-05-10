@@ -23,11 +23,6 @@ import mk.com.ukim.finki.mpip.instanim.databinding.FragmentPostDetailsBinding
 import mk.com.ukim.finki.mpip.instanim.glide.GlideApp
 import mk.com.ukim.finki.mpip.instanim.ui.auth.AuthViewModel
 import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import mk.com.ukim.finki.mpip.instanim.adapter.CommentAdapter
-import mk.com.ukim.finki.mpip.instanim.data.entity.Comment
 
 
 class PostDetailsFragment : Fragment() {
@@ -121,7 +116,7 @@ class PostDetailsFragment : Fragment() {
             navigateToMapPostDetails(post)
         }
         authViewModel.fetchCurrentUser()
-        if (post.likedBy.contains(authViewModel.currentUser.value?.data?.uid)){
+        if (post.likedBy.contains(authViewModel.currentUser.value?.data?.uid)) {
             binding.likeButton.text = "Unlike"
         } else {
             binding.likeButton.text = "Like"
@@ -148,10 +143,12 @@ class PostDetailsFragment : Fragment() {
         commentAdapter.setComments(comments)
     }
 
-    private fun navigateToMapPostDetails(post: Post){
-        val action = PostDetailsFragmentDirections.actionPostDetailsFragmentToPostDetailsMapsFragment(post.lat.toString(), post.lng.toString(),
-            post.description.toString()
-        )
+    private fun navigateToMapPostDetails(post: Post) {
+        val action =
+            PostDetailsFragmentDirections.actionPostDetailsFragmentToPostDetailsMapsFragment(
+                post.lat.toString(), post.lng.toString(),
+                post.description.toString()
+            )
         findNavController().navigate(action)
     }
 

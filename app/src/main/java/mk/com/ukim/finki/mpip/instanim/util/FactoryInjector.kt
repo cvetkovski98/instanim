@@ -12,11 +12,21 @@ object FactoryInjector {
     }
 
     fun getPostViewModel(): PostViewModelFactory {
-        return PostViewModelFactory(PostRepository, StorageRepository, AuthRepository)
+        return PostViewModelFactory(
+            PostRepository,
+            StorageRepository,
+            AuthRepository,
+            UserRepository
+        )
     }
 
     fun getPostCreateViewModel(): PostCreateViewModelFactory {
-        return PostCreateViewModelFactory(AuthRepository, PostRepository, StorageRepository)
+        return PostCreateViewModelFactory(
+            AuthRepository,
+            PostRepository,
+            StorageRepository,
+            UserRepository
+        )
     }
 
     fun getProfileViewModel(): ProfileViewModelFactory {

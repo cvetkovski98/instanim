@@ -19,4 +19,54 @@
     <string name="your_comment_placeholder">Your comment</string>
     <string name="title_post">Post</string>
     <string name="title_maps">Maps</string>
+    <string-array name="accepted_labels">
+        <item>Aquarium</item>
+        <item>Bird</item>
+        <item>Park</item>
+        <item>Pomacentridae</item>
+        <item>Shetland sheepdog</item>
+        <item>Gerbil</item>
+        <item>Bear</item>
+        <item>Person</item>
+        <item>Cattle</item>
+        <item>Jungle</item>
+        <item>Cat</item>
+        <item>Dalmatian</item>
+        <item>Fruit</item>
+        <item>Cairn terrier</item>
+        <item>Forest</item>
+        <item>Flora</item>
+        <item>Shell</item>
+        <item>Horse</item>
+        <item>Pixie-bob</item>
+        <item>Herd</item>
+        <item>Insect</item>
+        <item>Bridle</item>
+        <item>Plant</item>
+        <item>Penguin</item>
+        <item>Pet</item>
+        <item>Rein</item>
+        <item>Ranch</item>
+        <item>Mountain</item>
+        <item>Duck</item>
+        <item>Turtle</item>
+        <item>Crocodile</item>
+        <item>Wool</item>
+        <item>Branch</item>
+        <item>Garden</item>
+        <item>Field</item>
+        <item>Dog</item>
+        <item>Flower</item>
+        <item>Fur</item>
+        <item>Bull</item>
+        <item>Butterfly</item>
+        <item>Larva</item>
+        <item>Flowerpot</item>
+        <item>Farm</item>
+        <item>Seal</item>
+        <item>Sphynx</item>
+        <item>Basset hound</item>
+        <item>Rodeo</item>
+        <item>Barn</item>
+    </string-array>
 </resources>

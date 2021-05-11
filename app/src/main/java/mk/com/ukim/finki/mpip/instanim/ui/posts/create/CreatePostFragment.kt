@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.label.ImageLabeling
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import mk.com.ukim.finki.mpip.instanim.R
 import mk.com.ukim.finki.mpip.instanim.data.model.Status
 import mk.com.ukim.finki.mpip.instanim.databinding.FragmentCreatePostBinding
@@ -89,7 +93,32 @@ class CreatePostFragment : Fragment() {
         val lng = myMapHandler.getLng()
         val uri = args.imageUri
 
-        viewModel.createPost(description, lat, lng, uri)
+        val options = ImageLabelerOptions.Builder()
+            .setConfidenceThreshold(0.8f)
+            .build()
+        val acceptableLabels = resources.getStringArray(R.array.accepted_labels)
+        val labeler = ImageLabeling.getClient(options)
+        val image = InputImage.fromFilePath(requireContext(), uri)
+        labeler.process(image)
+            .addOnSuccessListener { labels ->
+//                Log.d("LABELS", labels.toString())
+                val result =
+                    labels.stream().filter { label -> acceptableLabels.contains(label.text) }
+                        .findFirst()
+                if (result.isPresent) {
+                    viewModel.createPost(description, lat, lng, uri)
+                } else {
+                    Toast.makeText(
+                        context,
+                        "You didn't upload a picture of an animal or a plant",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+            }
+
     }
 
     override fun onDestroy() {

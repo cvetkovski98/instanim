@@ -2,6 +2,7 @@ package mk.com.ukim.finki.mpip.instanim.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import mk.com.ukim.finki.mpip.instanim.R
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
@@ -56,16 +57,18 @@ class PostAdapter(
 
     inner class PostViewHolder : RecyclerView.ViewHolder(binder.root) {
         fun bind(post: Post) {
-            binder.usernameTextViewList.text = post.userId
+            binder.usernameTextViewList.text = post.username
             binder.descriptionPostList.text = post.description
             binder.likedBy.text = binder.root.resources.getString(R.string.liked_by, post.likedBy.size)
             GlideApp.with(binder.root.context)
                 .load(post.imageUri)
                 .into(binder.postImage)
             if (post.likedBy.contains(userId)){
-                binder.likeButton.text = "Unlike"
+//                binder.likeButton.text = "Unlike"
+                binder.likeButton.icon = ResourcesCompat.getDrawable(binder.root.resources, R.drawable.ic_baseline_like_24, null)
             } else {
-                binder.likeButton.text = "Like"
+//                binder.likeButton.text = "Like"
+                binder.likeButton.icon = ResourcesCompat.getDrawable(binder.root.resources, R.drawable.ic_baseline_like_border_24, null)
             }
         }
     }

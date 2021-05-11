@@ -1,7 +1,6 @@
 package mk.com.ukim.finki.mpip.instanim.repository
 
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.Query
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -16,7 +15,11 @@ object UserRepository {
     suspend fun getUsers(qString: String?): Resource<List<User>> {
         lateinit var resource: Resource<List<User>>
 
-        val query: Query = userDb.orderByChild("username").startAt(qString)
+        val query = qString?.let {
+            userDb.orderByChild("username").startAt(qString)
+        } ?: run {
+            userDb
+        }
 
         try {
             query.get().addOnSuccessListener {

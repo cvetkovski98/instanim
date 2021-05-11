@@ -1,5 +1,6 @@
 package mk.com.ukim.finki.mpip.instanim.ui.profile
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -44,7 +45,7 @@ class ProfileViewModel(
     private fun fetchAppUserData(uid: String) {
         _profile.value = Resource.loading(null)
         _profilePosts.value = Resource.loading(null)
-
+        Log.d("SOME", "fetchAppUserData: $uid")
         viewModelScope.launch(IO) {
             _profile.postValue(
                 userRepository.getUser(uid)

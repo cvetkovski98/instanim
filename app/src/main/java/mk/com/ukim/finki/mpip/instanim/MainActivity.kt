@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.postListFragment,
+                R.id.profileListFragment,
                 R.id.profileFragment,
                 R.id.pictureSelectFragment,
                 R.id.mapsFragment

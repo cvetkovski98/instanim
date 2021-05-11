@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import mk.com.ukim.finki.mpip.instanim.data.entity.Comment
 import mk.com.ukim.finki.mpip.instanim.databinding.FragmentPostDetailsCommentItemBinding
 
-class CommentAdapter(
-) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     private lateinit var binder: FragmentPostDetailsCommentItemBinding
     private var comments: ArrayList<Comment> = arrayListOf()

@@ -1,10 +1,6 @@
 package mk.com.ukim.finki.mpip.instanim.util
 
-import android.content.Context
-import mk.com.ukim.finki.mpip.instanim.factories.AuthViewModelFactory
-import mk.com.ukim.finki.mpip.instanim.factories.PostCreateViewModelFactory
-import mk.com.ukim.finki.mpip.instanim.factories.PostViewModelFactory
-import mk.com.ukim.finki.mpip.instanim.factories.ProfileViewModelFactory
+import mk.com.ukim.finki.mpip.instanim.factories.*
 import mk.com.ukim.finki.mpip.instanim.repository.AuthRepository
 import mk.com.ukim.finki.mpip.instanim.repository.PostRepository
 import mk.com.ukim.finki.mpip.instanim.repository.StorageRepository
@@ -16,14 +12,28 @@ object FactoryInjector {
     }
 
     fun getPostViewModel(): PostViewModelFactory {
-        return PostViewModelFactory(PostRepository, StorageRepository, AuthRepository, UserRepository)
+        return PostViewModelFactory(
+            PostRepository,
+            StorageRepository,
+            AuthRepository,
+            UserRepository
+        )
     }
 
     fun getPostCreateViewModel(): PostCreateViewModelFactory {
-        return PostCreateViewModelFactory(AuthRepository, PostRepository, StorageRepository, UserRepository)
+        return PostCreateViewModelFactory(
+            AuthRepository,
+            PostRepository,
+            StorageRepository,
+            UserRepository
+        )
     }
 
     fun getProfileViewModel(): ProfileViewModelFactory {
         return ProfileViewModelFactory(PostRepository, UserRepository, AuthRepository)
+    }
+
+    fun getProfileListViewModel(): ProfileListViewModelFactory {
+        return ProfileListViewModelFactory(UserRepository)
     }
 }

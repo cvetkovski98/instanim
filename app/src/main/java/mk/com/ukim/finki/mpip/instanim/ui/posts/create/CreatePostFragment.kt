@@ -94,7 +94,7 @@ class CreatePostFragment : Fragment() {
         val uri = args.imageUri
 
         val options = ImageLabelerOptions.Builder()
-            .setConfidenceThreshold(0.8f)
+            .setConfidenceThreshold(0.6f)
             .build()
         val acceptableLabels = resources.getStringArray(R.array.accepted_labels)
         val labeler = ImageLabeling.getClient(options)

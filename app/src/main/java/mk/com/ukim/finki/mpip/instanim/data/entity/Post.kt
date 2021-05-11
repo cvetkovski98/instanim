@@ -7,6 +7,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 data class Post(
     val postId: String = "",
     val userId: String? = null,
+    val username: String? = null,
     val createdAt: Long? = null,
     val lat: Double? = null,
     val lng: Double? = null,
@@ -20,6 +21,7 @@ data class Post(
         return mapOf(
             "postId" to postId,
             "userId" to userId,
+            "username" to username,
             "createdAt" to createdAt,
             "lat" to lat,
             "lng" to lng,

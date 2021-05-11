@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -100,7 +101,7 @@ class PostDetailsFragment : Fragment() {
         binding.descriptionPostDetails.text = post.description
         binding.likesPostDetails.text = resources.getString(R.string.liked_by, post.likedBy.size)
         updateAdapterData(post.comments.filterNotNull())
-        binding.usernameTextView.text = post.userId
+        binding.usernameTextView.text = post.username
         binding.likeButton.setOnClickListener {
             viewModel.likePost(post)
         }
@@ -117,10 +118,12 @@ class PostDetailsFragment : Fragment() {
         }
         authViewModel.fetchCurrentUser()
         if (post.likedBy.contains(authViewModel.currentUser.value?.data?.uid)) {
-            binding.likeButton.text = "Unlike"
-        } else {
-            binding.likeButton.text = "Like"
-        }
+//                binder.likeButton.text = "Unlike"
+            binding.likeButton.icon = ResourcesCompat.getDrawable(binding.root.resources, R.drawable.ic_baseline_like_24, null)
+            } else {
+//                binder.likeButton.text = "Like"
+            binding.likeButton.icon = ResourcesCompat.getDrawable(binding.root.resources, R.drawable.ic_baseline_like_border_24, null)
+            }
     }
 
     private fun initRecycler() {

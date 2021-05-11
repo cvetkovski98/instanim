@@ -94,6 +94,7 @@ class ProfileFragment : Fragment() {
         binding.username.text = profile.username
         binding.followersCount.text = "Followed By\n${profile.followedBy.size}"
         binding.followingCount.text = "Follows\n${profile.follows.size}"
+        binding.postCount.text = "Posts\n0"
     }
 
     private fun initRecycler() {

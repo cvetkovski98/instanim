@@ -12,11 +12,13 @@ import mk.com.ukim.finki.mpip.instanim.data.model.Resource
 import mk.com.ukim.finki.mpip.instanim.repository.AuthRepository
 import mk.com.ukim.finki.mpip.instanim.repository.PostRepository
 import mk.com.ukim.finki.mpip.instanim.repository.StorageRepository
+import mk.com.ukim.finki.mpip.instanim.repository.UserRepository
 
 class PostViewModel(
     private val postRepository: PostRepository,
     private val storageRepository: StorageRepository,
     private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _posts = MutableLiveData<Resource<List<Post>>>()
     private val _post = MutableLiveData<Resource<Post>>()
@@ -66,11 +68,12 @@ class PostViewModel(
 
     fun postComment(post: Post, comment: String) {
         _updatePostStatus.value = Resource.loading(null)
-        authRepository.currentUser().data?.uid?.let {
-            val commentToBePosted = Comment(it, comment)
-            post.comments.add(commentToBePosted)
-        }
         viewModelScope.launch(IO) {
+            authRepository.currentUser().data?.uid?.let {
+                val username = userRepository.getUser(it).data?.username
+                val commentToBePosted = Comment(username.toString(), comment)
+                post.comments.add(commentToBePosted)
+            }
             _updatePostStatus.postValue(
                 postRepository.updatePost(post)
             )

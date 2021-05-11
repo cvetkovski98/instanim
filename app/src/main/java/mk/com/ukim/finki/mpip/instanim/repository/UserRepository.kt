@@ -16,7 +16,7 @@ object UserRepository {
         lateinit var resource: Resource<List<User>>
 
         val query = qString?.let {
-            userDb.orderByChild("username").startAt(qString)
+            userDb.orderByChild("username").startAt(qString).endAt("$qString\uf8ff")
         } ?: run {
             userDb
         }

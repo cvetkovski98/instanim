@@ -1,5 +1,6 @@
 package mk.com.ukim.finki.mpip.instanim.ui.profiles
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,10 +20,20 @@ class ProfileListViewModel(
 
     fun fetchProfiles(query: String?) {
         _profiles.value = Resource.loading(null)
-        viewModelScope.launch(IO) {
-            _profiles.postValue(
-                userRepository.getUsers(query)
-            )
+
+        if (query.isNullOrBlank()) {
+            viewModelScope.launch(IO) {
+                _profiles.postValue(
+                    userRepository.getUsers(null)
+                )
+            }
+        } else {
+            viewModelScope.launch(IO) {
+                Log.d("fetchProfiles", "fetchProfiles: $query")
+                _profiles.postValue(
+                    userRepository.getUsers(query)
+                )
+            }
         }
     }
 

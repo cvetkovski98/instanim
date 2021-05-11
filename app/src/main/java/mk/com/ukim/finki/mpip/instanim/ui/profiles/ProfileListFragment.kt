@@ -1,6 +1,8 @@
 package mk.com.ukim.finki.mpip.instanim.ui.profiles
 
 import android.os.Bundle
+import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,11 +38,13 @@ class ProfileListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
+        initSearch()
         profileListViewModel.fetchProfiles(null)
         profileListViewModel.profiles.observe(viewLifecycleOwner, {
             when (it.status) {
                 Status.ERROR -> {
-                    // do nothing
+                    updateAdapterData(listOf())
+                    Log.d("ERROR", "onViewCreated: ${it.message}")
                 }
                 Status.LOADING -> {
                     // do nothing
@@ -48,9 +52,28 @@ class ProfileListFragment : Fragment() {
                 Status.SUCCESS -> {
                     it.data?.let { users ->
                         updateAdapterData(users)
+                        Log.d("SUCCESS", "onViewCreated: $users")
+                        Log.d("SUCCESS", "onViewCreated: ${it.message}")
                     }
                 }
             }
+        })
+    }
+
+    private fun initSearch() {
+        binding.editText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            when {
+                (event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) -> {
+                    var text: String? = binding.editText.text.toString()
+                    if (text.isNullOrBlank()) {
+                        text = null
+                    }
+                    profileListViewModel.fetchProfiles(text)
+                    return@OnKeyListener true
+                }
+                else -> false
+            }
+
         })
     }
 

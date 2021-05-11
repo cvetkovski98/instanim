@@ -28,14 +28,14 @@ class ProfileListAdapter(
         binding.root.setOnClickListener {
             onDetails(user.uid)
         }
-
+        holder.setIsRecyclable(false)
         holder.bind(user)
     }
 
-    fun setUsers(users: List<User>) {
+    fun setUsers(u: List<User>) {
         this.users.clear()
-        this.users.addAll(users)
-        this.notifyDataSetChanged()
+        this.users.addAll(u)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = users.size

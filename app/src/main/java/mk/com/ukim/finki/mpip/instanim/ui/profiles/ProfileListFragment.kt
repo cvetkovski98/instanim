@@ -44,16 +44,19 @@ class ProfileListFragment : Fragment() {
             when (it.status) {
                 Status.ERROR -> {
                     updateAdapterData(listOf())
-                    Log.d("ERROR", "onViewCreated: ${it.message}")
+                    binding.loadingPanel.visibility = View.GONE
+//                    Log.d("ERROR", "onViewCreated: ${it.message}")
                 }
                 Status.LOADING -> {
+                    binding.loadingPanel.visibility = View.VISIBLE
                     // do nothing
                 }
                 Status.SUCCESS -> {
+                    binding.loadingPanel.visibility = View.GONE
                     it.data?.let { users ->
                         updateAdapterData(users)
-                        Log.d("SUCCESS", "onViewCreated: $users")
-                        Log.d("SUCCESS", "onViewCreated: ${it.message}")
+//                        Log.d("SUCCESS", "onViewCreated: $users")
+//                        Log.d("SUCCESS", "onViewCreated: ${it.message}")
                     }
                 }
             }
@@ -61,10 +64,11 @@ class ProfileListFragment : Fragment() {
     }
 
     private fun initSearch() {
-        binding.editText.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+        binding.editText.editText?.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             when {
                 (event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) -> {
-                    var text: String? = binding.editText.text.toString()
+                    var text: String? = binding.editText.editText!!.text.toString()
+    //                    var text: String? = binding.editText.text.toString()
                     if (text.isNullOrBlank()) {
                         text = null
                     }

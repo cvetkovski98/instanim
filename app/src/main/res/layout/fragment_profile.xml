@@ -7,6 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment">
 
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_user_details"
         android:layout_width="match_parent"
@@ -33,7 +48,7 @@
 
         <TextView
             android:id="@+id/username"
-            android:layout_width="0dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:paddingHorizontal="12sp"
@@ -45,6 +60,45 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
             tools:text="\@cvetkovski98" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/follow_button"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="2dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:minWidth="1dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            app:icon="@drawable/ic_outline_follow_24"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            android:backgroundTint="@color/purple_500"
+            app:layout_constraintBottom_toTopOf="@+id/bio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/username"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logout_button"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="2dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:minWidth="1dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            app:icon="@drawable/ic_outline_logout_24"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            android:backgroundTint="@color/purple_500"
+            app:layout_constraintBottom_toTopOf="@+id/bio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/username"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/bio"
@@ -103,17 +157,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stats" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/logout_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:contentDescription="Logout Button"
-        android:src="@drawable/ic_dashboard_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,10 +37,10 @@ class SignupFragment : Fragment() {
 
     private fun setupButtons() {
         binding.signupButton.setOnClickListener {
-            val username = binding.username.text.toString()
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
-            val confirmPassword = binding.confirmPassword.text.toString()
+            val username = binding.username.editText?.text.toString()
+            val email = binding.email.editText?.text.toString()
+            val password = binding.password.editText?.text.toString()
+            val confirmPassword = binding.confirmPassword.editText?.text.toString()
 
             if (username.isBlank() ||
                 email.isBlank() ||

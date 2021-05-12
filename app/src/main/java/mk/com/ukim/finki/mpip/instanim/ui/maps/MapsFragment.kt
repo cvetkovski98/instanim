@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,6 +19,7 @@ import mk.com.ukim.finki.mpip.instanim.R
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
 import mk.com.ukim.finki.mpip.instanim.data.model.Status
 import mk.com.ukim.finki.mpip.instanim.databinding.FragmentMapsBinding
+import mk.com.ukim.finki.mpip.instanim.ui.auth.AuthViewModel
 import mk.com.ukim.finki.mpip.instanim.ui.posts.PostViewModel
 import mk.com.ukim.finki.mpip.instanim.util.FactoryInjector
 
@@ -58,6 +60,10 @@ class MapsFragment : Fragment() {
         FactoryInjector.getPostViewModel()
     }
 
+    private val authViewModel: AuthViewModel by activityViewModels {
+        FactoryInjector.getAuthViewModel()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -69,7 +75,7 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postListViewModel.fetchPosts()
+        authViewModel.currentUser.value?.data?.let { postListViewModel.fetchPosts(it.uid) }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
 
         postListViewModel.posts.observe(viewLifecycleOwner, {
@@ -82,7 +88,7 @@ class MapsFragment : Fragment() {
                 }
                 Status.SUCCESS -> {
                     it.data?.let { postsList ->
-                        posts = postsList
+                        posts = postsList.sortedBy { post -> post.createdAt }
                         mapFragment?.getMapAsync(callback)
                     }
                 }

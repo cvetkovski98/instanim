@@ -92,8 +92,8 @@ class AuthViewModel(
                 lastName = lastName,
                 imageUri = imageUri,
                 bio = bio,
-                follows = listOf(),
-                followedBy = listOf()
+                follows = mutableListOf(),
+                followedBy = mutableListOf()
             )
 
             // create app user

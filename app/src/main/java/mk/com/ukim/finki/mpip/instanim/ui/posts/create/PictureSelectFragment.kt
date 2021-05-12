@@ -35,6 +35,7 @@ class PictureSelectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        uploadPhoto()
         _binding = FragmentPictureSelectBinding.inflate(inflater, container, false)
         return binding.root
     }

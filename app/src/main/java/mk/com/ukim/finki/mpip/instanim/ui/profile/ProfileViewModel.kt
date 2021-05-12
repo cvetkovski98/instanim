@@ -1,6 +1,5 @@
 package mk.com.ukim.finki.mpip.instanim.ui.profile
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +26,14 @@ class ProfileViewModel(
     val profile: LiveData<Resource<User>>
         get() = _profile
 
+    private val _updateProfile = MutableLiveData<Resource<Unit>>()
+    val updateProfile: LiveData<Resource<Unit>>
+        get() = _updateProfile
+
+    private val _updateProfileFollowed = MutableLiveData<Resource<Unit>>()
+    val updateProfileFollowed: LiveData<Resource<Unit>>
+        get() = _updateProfileFollowed
+
     fun fetchProfileData(uid: String?) {
 
         uid?.let {
@@ -45,13 +52,38 @@ class ProfileViewModel(
     private fun fetchAppUserData(uid: String) {
         _profile.value = Resource.loading(null)
         _profilePosts.value = Resource.loading(null)
-        Log.d("SOME", "fetchAppUserData: $uid")
+//        Log.d("SOME", "fetchAppUserData: $uid")
         viewModelScope.launch(IO) {
             _profile.postValue(
                 userRepository.getUser(uid)
             )
             _profilePosts.postValue(
                 postRepository.getPosts(uid)
+            )
+        }
+    }
+
+    fun follow(followerUser: String, followedUser: String) {
+        _updateProfile.value = Resource.loading(null)
+        _updateProfileFollowed.value = Resource.loading(null)
+        viewModelScope.launch(IO) {
+            val follower = userRepository.getUser(followerUser)
+            val followed = userRepository.getUser(followedUser)
+            if (follower.data?.follows?.contains(followedUser) == true){
+                follower.data.follows.remove(followedUser)
+            } else {
+                follower.data?.follows?.add(followedUser)
+            }
+            if (followed.data?.followedBy?.contains(followerUser) == true){
+                followed.data.followedBy.remove(followerUser)
+            } else {
+                followed.data?.followedBy?.add(followerUser)
+            }
+            _updateProfile.postValue(
+                followed.data?.let { userRepository.updateUser(it) }
+            )
+            _updateProfileFollowed.postValue(
+                follower.data?.let { userRepository.updateUser(it) }
             )
         }
     }

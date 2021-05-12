@@ -92,6 +92,20 @@ class PostDetailsFragment : Fragment() {
                 }
             }
         })
+
+        viewModel.deletePost.observe(viewLifecycleOwner, {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    findNavController().navigateUp()
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {
+
+                }
+            }
+        })
     }
 
     private fun attachDataToFragment(post: Post) {
@@ -117,13 +131,28 @@ class PostDetailsFragment : Fragment() {
             navigateToMapPostDetails(post)
         }
         authViewModel.fetchCurrentUser()
-        if (post.likedBy.contains(authViewModel.currentUser.value?.data?.uid)) {
+        val currentUserUid = authViewModel.currentUser.value?.data?.uid
+        if (post.likedBy.contains(currentUserUid)) {
 //                binder.likeButton.text = "Unlike"
-            binding.likeButton.icon = ResourcesCompat.getDrawable(binding.root.resources, R.drawable.ic_baseline_like_24, null)
-            } else {
+            binding.likeButton.icon = ResourcesCompat.getDrawable(
+                binding.root.resources,
+                R.drawable.ic_baseline_like_24,
+                null
+            )
+        } else {
 //                binder.likeButton.text = "Like"
-            binding.likeButton.icon = ResourcesCompat.getDrawable(binding.root.resources, R.drawable.ic_baseline_like_border_24, null)
+            binding.likeButton.icon = ResourcesCompat.getDrawable(
+                binding.root.resources,
+                R.drawable.ic_baseline_like_border_24,
+                null
+            )
+        }
+        if (post.userId == currentUserUid){
+            binding.deleteButton.visibility = View.VISIBLE
+            binding.deleteButton.setOnClickListener {
+                deletePost(post.postId)
             }
+        }
     }
 
     private fun initRecycler() {
@@ -153,6 +182,10 @@ class PostDetailsFragment : Fragment() {
                 post.description.toString()
             )
         findNavController().navigate(action)
+    }
+
+    private fun deletePost(postId: String){
+        viewModel.deletePost(postId)
     }
 
     override fun onDestroy() {

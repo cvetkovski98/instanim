@@ -53,7 +53,8 @@ class MapsFragment : Fragment() {
             }
         }
         googleMap.setOnMarkerClickListener(mapsFragmentMapHandler)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(lastPost))
+        if (lastPost != null)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(lastPost))
     }
 
     private val postListViewModel: PostViewModel by viewModels {

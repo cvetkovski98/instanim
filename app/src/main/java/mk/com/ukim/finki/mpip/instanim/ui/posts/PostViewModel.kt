@@ -23,6 +23,7 @@ class PostViewModel(
     private val _posts = MutableLiveData<Resource<List<Post>>>()
     private val _post = MutableLiveData<Resource<Post>>()
     private val _updatePostStatus = MutableLiveData<Resource<Unit>>()
+    private val _deletePost = MutableLiveData<Resource<Unit>>()
 
     val posts: LiveData<Resource<List<Post>>>
         get() = _posts
@@ -33,11 +34,15 @@ class PostViewModel(
     val updatePostStatus: LiveData<Resource<Unit>>
         get() = _updatePostStatus
 
-    fun fetchPosts() {
+    val deletePost: LiveData<Resource<Unit>>
+        get() = _deletePost
+
+    fun fetchPosts(uid: String) {
         _posts.value = Resource.loading(null)
         viewModelScope.launch(IO) {
+            val user = userRepository.getUser(uid)
             _posts.postValue(
-                postRepository.getPosts()
+                postRepository.getPostsForList(user)
             )
         }
     }
@@ -76,6 +81,15 @@ class PostViewModel(
             }
             _updatePostStatus.postValue(
                 postRepository.updatePost(post)
+            )
+        }
+    }
+
+    fun deletePost(postId: String) {
+        _deletePost.value = Resource.loading(null)
+        viewModelScope.launch(IO) {
+            _deletePost.postValue(
+                postRepository.removePost(postId)
             )
         }
     }

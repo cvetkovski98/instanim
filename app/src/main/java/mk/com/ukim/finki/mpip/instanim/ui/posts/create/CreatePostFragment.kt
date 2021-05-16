@@ -70,12 +70,22 @@ class CreatePostFragment : Fragment() {
 
         viewModel.createResult.observe(viewLifecycleOwner, {
             when (it.status) {
-                Status.SUCCESS -> {
-                    redirectToList()
-                }
-                else -> {
+                // ZASHTO NE SAKA DEBEL?
+                Status.LOADING -> {
+                    binding.loadingPanel.visibility = View.VISIBLE
+                    binding.createPostButton.text = "uploading..."
+                    binding.createPostButton.isClickable = false
                     // do nothing
-                    // TODO: disable user input with dialog while waiting
+                }
+                Status.ERROR -> {
+                    binding.loadingPanel.visibility = View.GONE
+                    // do nothing
+                }
+                Status.SUCCESS -> {
+                    binding.createPostButton.text = "submit"
+                    binding.createPostButton.isClickable = true
+                    binding.loadingPanel.visibility = View.GONE
+                    redirectToList()
                 }
             }
         })
@@ -88,7 +98,7 @@ class CreatePostFragment : Fragment() {
     }
 
     private fun handleCreate() {
-        val description = binding.postDescription.text.toString()
+        val description = binding.postDescription.editText?.text.toString()
         val lat = myMapHandler.getLat()
         val lng = myMapHandler.getLng()
         val uri = args.imageUri
@@ -101,7 +111,6 @@ class CreatePostFragment : Fragment() {
         val image = InputImage.fromFilePath(requireContext(), uri)
         labeler.process(image)
             .addOnSuccessListener { labels ->
-//                Log.d("LABELS", labels.toString())
                 val result =
                     labels.stream().filter { label -> acceptableLabels.contains(label.text) }
                         .findFirst()
@@ -118,7 +127,6 @@ class CreatePostFragment : Fragment() {
             .addOnFailureListener { e ->
                 Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
             }
-
     }
 
     override fun onDestroy() {

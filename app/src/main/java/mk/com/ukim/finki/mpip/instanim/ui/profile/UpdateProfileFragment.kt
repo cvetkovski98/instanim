@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import mk.com.ukim.finki.mpip.instanim.MainActivity
 import mk.com.ukim.finki.mpip.instanim.data.model.Status
 import mk.com.ukim.finki.mpip.instanim.databinding.FragmentUpdateProfileBinding
 import mk.com.ukim.finki.mpip.instanim.ui.auth.AuthViewModel
@@ -82,9 +83,9 @@ class UpdateProfileFragment : Fragment() {
             val password = args.password
             val email = args.email
 
-            val name = binding.profileName.text.toString()
-            val lastName = binding.profileLastName.text.toString()
-            val bio = binding.profileBio.text.toString()
+            val name = binding.profileName.editText?.text.toString()
+            val lastName = binding.profileLastName.editText?.text.toString()
+            val bio = binding.profileBio.editText?.text.toString()
             val localUri = this.imageUri
 
             if (name.isBlank() || lastName.isBlank() || bio.isBlank()) {
@@ -125,8 +126,11 @@ class UpdateProfileFragment : Fragment() {
     }
 
     private fun redirectToList() {
-        val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToMainActivity()
-        findNavController().navigate(action)
+//        val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToMainActivity()
+//        findNavController().navigate(action)
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     override fun onDestroy() {

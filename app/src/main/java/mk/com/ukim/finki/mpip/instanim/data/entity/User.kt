@@ -11,8 +11,8 @@ data class User(
     val lastName: String = "",
     val imageUri: String = "",
     val bio: String? = null,
-    val follows: List<String> = listOf(),
-    val followedBy: List<String> = listOf()
+    val follows: MutableList<String> = mutableListOf(),
+    val followedBy: MutableList<String> = mutableListOf()
 ) {
     @Exclude
     fun toMap(): Map<String, Any?> {

@@ -44,19 +44,22 @@ class PostListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
 
-        postListViewModel.fetchPosts()
+        authViewModel.currentUser.value?.data?.let { postListViewModel.fetchPosts(it.uid) }
 
         postListViewModel.posts.observe(viewLifecycleOwner, {
             when (it.status) {
-                Status.ERROR -> {
+                Status.LOADING -> {
+                    binding.loadingPanel.visibility = View.VISIBLE
                     // do nothing
                 }
-                Status.LOADING -> {
+                Status.ERROR -> {
+                    binding.loadingPanel.visibility = View.GONE
                     // do nothing
                 }
                 Status.SUCCESS -> {
+                    binding.loadingPanel.visibility = View.GONE
                     it.data?.let { posts ->
-                        updateAdapterData(posts)
+                        updateAdapterData(posts.sortedByDescending { post -> post.createdAt })
                     }
                 }
             }
@@ -68,10 +71,11 @@ class PostListFragment : Fragment() {
         postAdapter = PostAdapter(
             authViewModel.currentUser.value?.data?.uid.toString(),
             mutableListOf(), // empty list
-            likePost = {post -> likePost(post)},
-            onDetails = {id -> navigateToDetails(id)})
+            likePost = { post -> likePost(post) },
+            onDetails = { id -> navigateToDetails(id) })
 
         val llm = LinearLayoutManager(context)
+//        binding.postList.setItemViewCacheSize(30)
 
         binding.postList.apply {
             adapter = postAdapter
@@ -88,7 +92,7 @@ class PostListFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun likePost(post: Post){
+    private fun likePost(post: Post) {
         postListViewModel.likePost(post)
     }
 

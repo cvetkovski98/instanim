@@ -1,31 +1,32 @@
 package mk.com.ukim.finki.mpip.instanim.repository
 
-import android.content.Context
-import android.util.Log
-import androidx.core.net.toUri
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.label.ImageLabeling
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import kotlinx.coroutines.tasks.await
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
+import mk.com.ukim.finki.mpip.instanim.data.entity.User
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
-import kotlin.coroutines.coroutineContext
 
 object PostRepository {
 
     private val postDb: DatabaseReference = Firebase.database.reference.child("posts")
 
-    suspend fun getPosts(): Resource<List<Post>> {
+    suspend fun getPostsForList(user: Resource<User>): Resource<List<Post>> {
         lateinit var resource: Resource<List<Post>>
 
         try {
             postDb.get().addOnSuccessListener {
-                val idPostMap = it.getValue<Map<String, Post>>()
+                var idPostMap = it.getValue<Map<String, Post>>()
+                idPostMap = idPostMap?.filter { (key, value) ->
+                    value.userId?.let { it1 ->
+                        user.data?.follows?.contains(
+                            it1
+                        )
+                    } == true || value.userId == user.data?.uid
+                }
                 resource = if (idPostMap != null) {
                     Resource.success(idPostMap.values.toList())
                 } else {

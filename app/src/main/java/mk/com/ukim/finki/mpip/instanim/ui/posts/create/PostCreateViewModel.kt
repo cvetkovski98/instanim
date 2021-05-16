@@ -11,6 +11,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mk.com.ukim.finki.mpip.instanim.data.entity.Post
 import mk.com.ukim.finki.mpip.instanim.data.model.Resource
@@ -42,11 +43,10 @@ class PostCreateViewModel(
 
         viewModelScope.launch(IO) {
             storageRepository.uploadPhoto(Uri.parse(localUri.toString()), imageTargetUri)
-
-            // TODO: handle possible failure
+            val username = userRepository.getUser(userId).data?.username
             val uri = storageRepository.getDownloadUrl(imageTargetUri)
             val imageUri = uri.data
-            val username = userRepository.getUser(userId).data?.username
+            delay(2000)
 
             val post = Post(
                 postId = postId,
